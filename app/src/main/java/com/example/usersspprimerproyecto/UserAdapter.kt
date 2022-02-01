@@ -27,6 +27,7 @@ class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdap
         with(holder){ // se va a alimentar cada propiedad de la vista con los datos de cada user
             binding.tvOrder.text = user.id.toString()
             binding.tvName.text = user.name
+            binding.imageView = user.url
 
         }
     }
