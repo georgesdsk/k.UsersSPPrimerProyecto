@@ -1,8 +1,11 @@
 package com.example.usersspprimerproyecto
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.BoringLayout
+import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.usersspprimerproyecto.databinding.ActivityMainBinding
@@ -13,7 +16,7 @@ import com.example.usersspprimerproyecto.databinding.ActivityMainBinding
 Para agregar las fotos hay que añadir la dependencia al
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickListener {
 
     private lateinit var userAdapter: UserAdapter
     private lateinit var lineaLayoutManager: RecyclerView.LayoutManager
@@ -25,13 +28,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)// se infla el binding
         setContentView(binding.root) // y se asigna al binding hacia esta ACTIVIDAD
 
-        userAdapter = UserAdapter(rellenarLista()) // inicializacion de un listado, esta vacio
+        userAdapter = UserAdapter(rellenarLista(),this) // inicializacion de un listado, esta vacio
         lineaLayoutManager = LinearLayoutManager(this)
 
         binding.recyclerView.apply {
+            setHasFixedSize(true)
             layoutManager = lineaLayoutManager // el layout
             adapter = userAdapter // el adaptador
         }
+
+        //almacenamiento
+
+        val preferences = getPreferences(Context.MODE_PRIVATE)
+        val isFirstTime = preferences.getBoolean(getString(R.string.sp_first_time), true)// por si no encuentra ningun valor, que devuelva true
+        Log.i("SP", "${getString(R.string.sp_first_time)} = $isFirstTime")
 
     }
 
@@ -63,5 +73,10 @@ class MainActivity : AppCompatActivity() {
 
     return users
  }
+    ///Extiende del clickListener, por lo que tiene que implementar este codigo
+    override fun onClick(user: User, position: Int) {
+        Toast.makeText(this,"$position: ${user.name}" ,Toast.LENGTH_SHORT).show()
+    }
+
 
 }

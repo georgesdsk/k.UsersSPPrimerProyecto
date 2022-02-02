@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UsersSPPrimerProyecto</string>
+    <string name="sp_first_time">first_time</string>
 </resources>

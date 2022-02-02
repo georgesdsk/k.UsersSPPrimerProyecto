@@ -9,10 +9,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.usersspprimerproyecto.databinding.ItemUserBinding
 
-class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class UserAdapter(private val users: List<User>, private val listener: OnClickListener) :
+    RecyclerView.Adapter<UserAdapter.ViewHolder>() { //se pasa el recycler view con el adaptador(hace cositas con la vista, la infla),
+                                                    // que se pasa con el viewholder( el poseedor del binding y del clickListener)
 
     private lateinit var context: Context /*la varibla se va a inicializar despues*/
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +27,9 @@ class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = users.get(position)
 
-        with(holder){ // se va a alimentar cada propiedad de la vista con los datos de cada user
+        with(holder){ // se va a alimentar cada propiedad de la vista con los datos de cada user, se llama al objeto holder, a todas sus propiedades
+
+            setListener(user, position) // todo he petado
             binding.tvOrder.text = (position + 1).toString()
             binding.tvName.text = user.name
             Glide.with(context)
@@ -45,8 +48,13 @@ class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdap
 
 
     // definicion de la clase
-    inner class ViewHolder(view : View ): RecyclerView.ViewHolder(view){
-        val binding = ItemUserBinding.bind(view) // no entiendo que es el itemUser
+    inner class ViewHolder(view : View ): RecyclerView.ViewHolder(view){ // guarda dentro la vista que queremos utiliar
+        val binding = ItemUserBinding.bind(view)
+
+        fun setListener(user: User, position: Int){
+            binding.root.setOnClickListener {listener.onClick(user, position)} // si es pulsado, llamara al metodo del listener con el usuario seleccionado
+        }
+
     }
 
 }
